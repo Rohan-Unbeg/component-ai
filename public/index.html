@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Component Generator</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Monaco Editor CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.37.0/min/vs/editor/editor.main.min.css" />
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Custom styles */
+    .code-editor-container {
+      margin-top: 20px;
+      position: relative;
+    }
+    #code-editor {
+      height: 300px;
+      width: 100%;
+    }
+    #copyBtn {
+      position: absolute;
+      top: -50px; /* Adjusted to move the button above the editor */
+      right: 10px;
+      z-index: 10; /* Ensures the button stays above the editor */
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 font-['Roboto']">
+  <!-- Navbar -->
+  <nav class="bg-blue-800 text-white py-4">
+    <div class="container mx-auto flex justify-between items-center px-4">
+      <a href="#" class="text-2xl font-bold">Component Generator</a>
+      <div>
+        <a href="#" class="mx-2 hover:text-gray-300">Home</a>
+        <a href="#" class="mx-2 hover:text-gray-300">About</a>
+        <a href="#" class="mx-2 hover:text-gray-300">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-blue-700 text-white py-6">
+    <div class="container mx-auto text-center">
+      <h1 class="text-4xl font-semibold">Welcome to the Component Generator</h1>
+      <p class="mt-2 text-lg">Create and customize your components with ease.</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-lg rounded-lg p-6">
+      <textarea
+        id="prompt"
+        rows="4"
+        cols="50"
+        class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Enter your prompt here..."
+      ></textarea>
+      <br /><br />
+      <button
+        id="generateBtn"
+        class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Generate Code
+      </button>
+
+      <div class="code-editor-container mt-6">
+        <button
+          id="copyBtn"
+          class="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+        >
+          Copy Code
+        </button>
+        <div id="code-editor" class="mt-4"></div>
+      </div>
+      
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-blue-800 text-white py-4 mt-8">
+    <div class="container mx-auto text-center">
+      <p>&copy; 2024 Component Generator. All rights reserved.</p>
+      <p>Built with love and Tailwind CSS</p>
+    </div>
+  </footer>
+
+  <!-- Monaco Editor JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.37.0/min/vs/loader.js"></script>
+  <script>
+    require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.37.0/min/vs' }});
+    require(['vs/editor/editor.main'], function() {
+      const editor = monaco.editor.create(document.getElementById('code-editor'), {
+        language: 'html',
+        theme: 'vs-dark',
+        readOnly: true,
+        minimap: { enabled: false },  // Disable the minimap
+        lineNumbers: true,           // Show line numbers
+        scrollBeyondLastLine: false,  // Prevents scrolling past the last line
+      });
+
+      document.getElementById("generateBtn").addEventListener("click", async () => {
+        const prompt = document.getElementById("prompt").value;
+
+        try {
+          const response = await fetch("/generate-code", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ prompt }),
+          });
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+
+          let code = '';
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            code += decoder.decode(value, { stream: true });
+          }
+
+          editor.setValue(code);
+
+        } catch (error) {
+          console.error("Error generating code:", error);
+        }
+      });
+
+      document.getElementById("copyBtn").addEventListener("click", () => {
+        const code = editor.getValue();
+        navigator.clipboard.writeText(code).then(() => {
+          alert("Code copied to clipboard!");
+        }).catch(err => {
+          console.error("Failed to copy code:", err);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
