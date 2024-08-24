@@ -30,9 +30,11 @@
 const express = require('express');
 const Groq = require('groq-sdk');
 const path = require('path');
+require('dotenv').config();
 
+const ApiKey = process.env.GROQ_KEY;
 // Initialize Groq with your API key
-const groq = new Groq({ apiKey: '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' });
+const groq = new Groq({ apiKey: ApiKey });
 
 const app = express();
 const port = 3000;
