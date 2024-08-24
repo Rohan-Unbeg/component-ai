@@ -29,38 +29,24 @@ To get started with the AI Component Generator, follow these steps:
 Make sure you have Node.js installed. Run the following command to install the necessary dependencies:
 
   ```bash
-  Copy code
-  npm install
+  npm install`
+  ```
 
 2. **Run the Application
 
 Start the development server with:
 
-bash
-Copy code
-npm run dev
+  ```bash
+  npm run dev
+  ```
+
 Open your browser and navigate to http://localhost:3000 to access the application.
 
 Usage
-Enter Component Description: In the provided text area, describe the component you want to generate.
-Generate Code: Click the "Generate Component" button to receive the generated code.
-View and Edit Code: Review and edit the generated code in the Monaco Editor.
-Preview the Component: See the live preview of your component in the iframe.
-Copy Code: Use the "Copy Code" button to copy the generated code to your clipboard.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-Acknowledgments
-Tailwind CSS for the beautiful and responsive design.
-Monaco Editor for the powerful code editing experience.
-Groq SDK for integrating AI-driven code generation.
-c
-Copy code
-
-Feel free to replace `https://github.com/your-username/ai-component-generator.git` with the actual repository URL and adjust any other details as needed!
-
-
-
-
+1. Enter Component Description: In the provided text area, describe the component you want to generate.
+2. Generate Code: Click the "Generate Component" button to receive the generated code.
+3. View and Edit Code: Review and edit the generated code in the Monaco Editor.
+4. Preview the Component: See the live preview of your component in the iframe.
+5. Copy Code: Use the "Copy Code" button to copy the generated code to your clipboard.
 
 
