@@ -28,10 +28,11 @@ To get started with the AI Component Generator, follow these steps:
 
 Make sure you have Node.js installed. Run the following command to install the necessary dependencies:
 
-bash
-Copy code
-npm install
-Run the Application
+  ```bash
+  Copy code
+  npm install
+
+2. **Run the Application
 
 Start the development server with:
 
