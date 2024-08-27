@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication with Firebase</title>
+  <script defer src="/firebase.js"></script>
+</head>
+<body>
+  <button id="sign-in">Sign In</button>
+  <button id="subscribe" style="display: none;">Subscribe Now</button>
+
+  <script>
+    import { initializeApp } from 'firebase/app';
+    import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+      projectId: 'YOUR_PROJECT_ID',
+      storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+      messagingSenderId: 'YOUR_SENDER_ID',
+      appId: 'YOUR_APP_ID',
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    document.getElementById('sign-in').addEventListener('click', () => {
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          document.getElementById('subscribe').style.display = 'block';
+          // You can save user info to your backend here
+        }).catch((error) => {
+          console.error('Error during sign-in:', error);
+        });
+    });
+
+    document.getElementById('subscribe').addEventListener('click', () => {
+      // Implement subscription logic here
+    });
+  </script>
+</body>
+</html>
