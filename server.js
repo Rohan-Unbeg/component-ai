@@ -1,32 +1,3 @@
-// groq api key = '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'
-
-
-// const Groq = require('groq-sdk');
-
-// const groq = new Groq();
-// async function main() {
-//   const chatCompletion = await groq.chat.completions.create({
-//     "messages": [
-//       {
-//         "role": "user",
-//         "content": "create a contact form in html css in single file only\n"
-//       }
-//     ],
-//     "model": "llama3-70b-8192",
-//     "temperature": 1,
-//     "max_tokens": 1024,
-//     "top_p": 1,
-//     "stream": true,
-//     "stop": null
-//   });
-
-//   for await (const chunk of chatCompletion) {
-//     process.stdout.write(chunk.choices[0]?.delta?.content || '');
-//   }
-// }
-
-// main();
-
 const express = require('express');
 const Groq = require('groq-sdk');
 const path = require('path');
