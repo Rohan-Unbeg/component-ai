@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Authentication with Firebase</title>
-  <script defer src="/firebase.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authentication with Google</title>
+  <!-- Include Passport for OAuth -->
 </head>
 <body>
-  <button id="sign-in">Sign In</button>
-  <button id="subscribe" style="display: none;">Subscribe Now</button>
+  <button id="sign-in">Sign In with Google</button>
+  <button id="subscribe" style="display: none">Subscribe Now</button>
 
   <script>
-    import { initializeApp } from 'firebase/app';
-    import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: 'YOUR_API_KEY',
-      authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-      projectId: 'YOUR_PROJECT_ID',
-      storageBucket: 'YOUR_PROJECT_ID.appspot.com',
-      messagingSenderId: 'YOUR_SENDER_ID',
-      appId: 'YOUR_APP_ID',
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    document.getElementById('sign-in').addEventListener('click', () => {
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          document.getElementById('subscribe').style.display = 'block';
-          // You can save user info to your backend here
-        }).catch((error) => {
-          console.error('Error during sign-in:', error);
-        });
+    document.getElementById("sign-in").addEventListener("click", () => {
+      window.location.href = "/auth/google";
     });
 
-    document.getElementById('subscribe').addEventListener('click', () => {
-      // Implement subscription logic here
+    document.getElementById("subscribe").addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const response = await fetch("/create-subscription", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ customerEmail: user.email }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          if (data.subscriptionId) {
+            alert("Subscription created successfully! Subscription ID: " + data.subscriptionId);
+          } else {
+            alert("Failed to create subscription");
+          }
+        } catch (error) {
+          console.error("Failed to create subscription:", error);
+          alert("Failed to create subscription: " + error.message);
+        }
+      } else {
+        alert("User not authenticated");
+      }
     });
   </script>
 </body>
